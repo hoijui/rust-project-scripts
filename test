@@ -14,24 +14,48 @@ set -Eeuo pipefail
 
 # We run all tests, even if some are failing.
 
-exit=0
+tests=0
+failures=0
+
+function _report_test_res() {
+  res="$1"
+  echo -n "TEST: "
+  if [ "$res" -eq 0 ]
+  then
+    echo "succeeded."
+  else
+    echo "failed."
+  fi
+}
 
 echo
 echo
 echo "TEST: 'cargo test' - Run unit-tests ..."
-cargo test --release --lib || exit=$?
+failed=0
+cargo test --release --lib || failed=1
+failures=$((failures + failed))
+tests=$((tests + 1))
+_report_test_res "$failed"
 
 echo
 echo
 echo "TEST: 'cargo fmt' - Check source code formatting ..."
-cargo fmt -- --check || exit=$?
+failed=0
+cargo fmt -- --check || failed=1
+failures=$((failures + failed))
+tests=$((tests + 1))
+_report_test_res "$failed"
 
 echo
 echo
 echo "TEST: 'cargo clippy' - Static code linting ..."
+failed=0
 cargo clippy --release -- \
   --deny clippy::pedantic \
-  || exit=$?
+  || failed=1
+failures=$((failures + failed))
+tests=$((tests + 1))
+_report_test_res "$failed"
 
 echo
 echo
@@ -39,16 +63,34 @@ echo "TEST: 'cargo test' - Building documentaiton and running docu code ..."
 # This flag will run your code examples as tests.
 # For more, see the chapter on documentation tests:
 # https://doc.rust-lang.org/rustdoc/documentation-tests.html
-cargo test --release --doc || exit=$?
+failed=0
+cargo test --release --doc || failed=1
+failures=$((failures + failed))
+tests=$((tests + 1))
+_report_test_res "$failed"
 
 echo
 echo
 echo "TEST: 'cargo clippy' - Licensing meta-data check ..."
 if which reuse > /dev/null
 then
-  reuse lint || exit=$?
+  failed=0
+  reuse lint || failed=1
+  failures=$((failures + failed))
+  tests=$((tests + 1))
+  _report_test_res "$failed"
 else
-  echo "WARNING: REUSE tool not found; skipping licensing meta-data check."
+  >&2 echo "WARNING: REUSE tool not found; skipping licensing meta-data check."
 fi
 
-exit $exit
+echo
+echo
+echo "Successful tests: $((tests - failures))/$tests"
+if [ $failures -eq 0 ]
+then
+  echo "All tests successfull!"
+else
+  >&2 echo "There were test failures!"
+fi
+
+exit $failures
