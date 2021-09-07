@@ -71,7 +71,7 @@ _report_test_res "$failed"
 
 echo
 echo
-echo "TEST: 'cargo clippy' - Licensing meta-data check ..."
+echo "TEST: 'REUSE' - Licensing meta-data check ..."
 if which reuse > /dev/null
 then
   failed=0
