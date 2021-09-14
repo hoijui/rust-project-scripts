@@ -32,7 +32,7 @@ echo
 echo
 echo "TEST: 'cargo test' - Run unit-tests ..."
 failed=0
-cargo test --release --lib || failed=1
+cargo test --release || failed=1
 failures=$((failures + failed))
 tests=$((tests + 1))
 _report_test_res "$failed"
