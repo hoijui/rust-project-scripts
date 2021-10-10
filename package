@@ -12,7 +12,7 @@ set -Eeuo pipefail
 script_dir=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
 source "$script_dir/env"
 
-mkdir -p "$STAGING"
+mkdir -p "$TARGET_DIR/$STAGING"
 # mkdir -p "$STAGING"/{complete,doc}
 
 find . -maxdepth 1 \
@@ -24,7 +24,7 @@ find . -maxdepth 1 \
     -name "*FAQ*" -o \
     -name "*CHANGELOG*" \
     \) \
-    -exec cp -r {} "$STAGING/" \;
+    -exec cp -r {} "$TARGET_DIR/$STAGING/" \;
 
 if [ ! -e "$BINARY_PATH" ]
 then
@@ -35,7 +35,10 @@ then
   exit 1
 fi
 
-cp "$BINARY_PATH" "$STAGING/"
+cp "$BINARY_PATH" "$TARGET_DIR/$STAGING/"
+
+OLD_DIR="$(pwd)"
+cd "$TARGET_DIR"
 
 if $IS_WIN
 then
@@ -48,3 +51,5 @@ else
   # fi
   tar czf "$PACKAGE_ARCHIVE" "$STAGING"
 fi
+
+cd "$OLD_DIR"

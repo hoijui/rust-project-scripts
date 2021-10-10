@@ -94,7 +94,7 @@ else
 fi
 var_names+=("IS_WIN")
 
-STAGING="./target/$NAME-$VERSION"
+STAGING="$NAME-$VERSION"
 # When CARGO is set to CROSS, TARGET_DIR includes matrix.target.
 TARGET_DIR="./target"
 if [ -n "$TARGET" ]
