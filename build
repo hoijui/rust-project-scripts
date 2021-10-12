@@ -10,6 +10,7 @@ set -Eeuo pipefail
 #set -Eeu
 
 script_dir=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
+# shellcheck source=./env
 source "$script_dir/env"
 
 $CARGO build --verbose --release $TARGET_FLAGS
