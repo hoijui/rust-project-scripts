@@ -13,8 +13,48 @@ script_dir=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
 # shellcheck source=./env
 source "$script_dir/env"
 
+APP_NAME="Rust release script"
+
+push="false"
+
+function print_help() {
+
+	script_name="$(basename "$0")"
+	echo "${APP_NAME} - Releases a new version of this software."
+	echo "Including a commit that changes the Cargo.toml|lock version, and a tag."
+	echo
+	echo "Usage:"
+	echo "  $script_name [OPTION...] [NEW-VERSION]"
+	echo "Options:"
+	echo "  -p, --push              Also push commit and tag to origin"
+	echo "  -h, --help              Print this usage help and exit"
+	echo "Examples:"
+	echo "  $script_name"
+}
+
+# read command-line args
+POSITIONAL=()
+while [[ $# -gt 0 ]]
+do
+	arg="$1"
+	shift # $2 -> $1, $3 -> $2, ...
+
+	case "$arg" in
+		-p|--push)
+			push="true"
+			;;
+		-h|--help)
+			print_help
+			exit 0
+			;;
+		*) # non-/unknown option
+			POSITIONAL+=("$arg") # save it in an array for later
+			;;
+	esac
+done
+set -- "${POSITIONAL[@]}" # restore positional parameters
+
 new_version="${1:-}"
-push="${2:-false}"
 
 if [ -z "${new_version:-}" ]
 then
