@@ -57,7 +57,7 @@ BINARY="${BINARY:-$NAME}"
 var_names+=("BINARY")
 
 # Our version
-OUR_VERSION="${OUR_VERSION:-$(_our_version)}"
+OUR_VERSION="${OUR_VERSION:-$(_our_version "$script_dir/..")}"
 var_names+=("OUR_VERSION")
 VERSION="$OUR_VERSION"
 var_names+=("VERSION")
