@@ -59,7 +59,7 @@ _report_test_res "$failed"
 
 echo
 echo
-echo "TEST: 'cargo test' - Building documentaiton and running docu code ..."
+echo "TEST: 'cargo doc-code(-tests)' - Building documentaiton and running docu code ..."
 # This flag will run your code examples as tests.
 # For more, see the chapter on documentation tests:
 # https://doc.rust-lang.org/rustdoc/documentation-tests.html
