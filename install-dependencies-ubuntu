@@ -13,4 +13,13 @@ sudo apt-get update
 sudo apt-get install -y --no-install-recommends \
   liblz4-tool \
   musl-tools \
+  wget \
   xz-utils
+
+if ! which stoml
+then
+	mkdir -p target/tools
+	wget "https://github.com/freshautomations/stoml/releases/download/v0.7.0/stoml_linux_amd64" \
+		-O stoml
+	chmod +x target/tools/stoml
+fi
