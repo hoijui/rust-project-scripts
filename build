@@ -13,6 +13,10 @@ script_dir=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
 # shellcheck source=./env
 source "$script_dir/env"
 
+if [ -z "${TARGET_FLAGS_ARRAY:-}" ]
+then
+	TARGET_FLAGS_ARRAY=()
+fi
 $CARGO build --verbose --release "${TARGET_FLAGS_ARRAY[@]}"
 
 if [ -f "$BINARY_PATH" ]

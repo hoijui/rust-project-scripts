@@ -52,12 +52,16 @@ set -a # All variables get exported when set, even without 'export' in front
 # STOML is a simple TOML parser fo BASH.
 # We use it to parse Cargo.toml.
 # see: https://github.com/freshautomations/stoml/
-STOML="$(which stoml)"
+STOML="$(which stoml || true)"
 STOML="${STOML:-"target/tools/stoml"}"
 if ! [ -e "$STOML" ]
 then
 	>&2 echo "ERROR: Please make sure that 'stoml' is available through your PATH or under '$STOML'."
 	>&2 echo "       You may get it from <https://github.com/freshautomations/stoml>."
+	>&2 echo "       Using these commands:"
+	>&2 echo "       mkdir -p \"$(dirname "$STOML")\""
+	>&2 echo "       wget https://github.com/freshautomations/stoml/releases/download/v0.7.0/stoml_linux_amd64 -O \"$STOML\""
+	>&2 echo "       chmod +x \"$STOML\""
 	exit 1
 fi
 
@@ -101,8 +105,15 @@ var_names+=("CARGO")
 # When CARGO is set to CROSS, this is set to `--target matrix.target`.
 TARGET_FLAGS="${TARGET_FLAGS:-}"
 IFS=' ' read -r -a TARGET_FLAGS_ARRAY <<< "$TARGET_FLAGS"
+if [ -n "${TARGET_FLAGS_ARRAY:-}" ]
+then
+	var_names+=("TARGET_FLAGS_ARRAY")
+	# echo set array
+	# TARGET_FLAGS_ARRAY=""
+	# echo "${TARGET_FLAGS_ARRAY[*]}"
+fi
+#echo "${TARGET_FLAGS_ARRAY[@]}"
 var_names+=("TARGET_FLAGS")
-var_names+=("TARGET_FLAGS_ARRAY")
 
 # Emit backtraces on panics.
 RUST_BACKTRACE=1
