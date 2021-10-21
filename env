@@ -10,6 +10,7 @@ set -Eeuo pipefail
 #set -Eeu
 
 script_dir=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
+proj_dir=$(cd "$script_dir/.."; pwd)
 
 function _is_win() {
 
@@ -48,7 +49,22 @@ function _our_version() {
 var_names=()
 set -a # All variables get exported when set, even without 'export' in front
 
+# STOML is a simple TOML parser fo BASH.
+# We use it to parse Cargo.toml.
+# see: https://github.com/freshautomations/stoml/
+STOML="$(which stoml)"
+STOML="${STOML:-"target/tools/stoml"}"
+if ! [ -e "$STOML" ]
+then
+	>&2 echo "ERROR: Please make sure that 'stoml' is available through your PATH or under '$STOML'."
+	>&2 echo "       You may get it from <https://github.com/freshautomations/stoml>."
+	exit 1
+fi
+
+CARGO_TOML="$proj_dir/Cargo.toml"
+
 # Application name
+NAME="${NAME:-$($STOML "$CARGO_TOML" package.name)}"
 NAME="${NAME:-$(basename "$(pwd)")}"
 var_names+=("NAME")
 
