@@ -68,6 +68,10 @@ NAME="${NAME:-$($STOML "$CARGO_TOML" package.name)}"
 NAME="${NAME:-$(basename "$(pwd)")}"
 var_names+=("NAME")
 
+# Application version
+VERSION="${VERSION:-$($STOML "$CARGO_TOML" package.version)}"
+var_names+=("VERSION")
+
 # Binary name
 BINARY="${BINARY:-$NAME}"
 var_names+=("BINARY")
