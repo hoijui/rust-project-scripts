@@ -15,4 +15,7 @@ source "$script_dir/env"
 
 $CARGO build --verbose --release "${TARGET_FLAGS_ARRAY[@]}"
 
-strip "$BINARY_PATH"
+if [ -f "$BINARY_PATH" ]
+then
+	strip "$BINARY_PATH"
+fi
