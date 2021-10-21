@@ -161,7 +161,10 @@ var_names+=("PACKAGE_ARCHIVE")
 
 for var_name in "${var_names[@]}"
 do
-  echo "$var_name=${!var_name}"
+  if [ "${OUTPUT:-}" = "true" ]
+  then
+    echo "$var_name=${!var_name}"
+  fi
   if [ -n "$ENV_FILE" ]
   then
     echo "$var_name=${!var_name}" >> "$ENV_FILE"
