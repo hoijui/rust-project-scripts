@@ -48,6 +48,15 @@ _report_test_res "$failed"
 
 echo
 echo
+echo "TEST: 'cargo sort' - Check Cargo.toml dependencies order ..."
+failed=0
+cargo sort --check || failed=1
+failures=$((failures + failed))
+tests=$((tests + 1))
+_report_test_res "$failed"
+
+echo
+echo
 echo "TEST: 'cargo clippy' - Static code linting ..."
 failed=0
 cargo clippy --release -- \
