@@ -46,6 +46,10 @@ failures=$((failures + failed))
 tests=$((tests + 1))
 _report_test_res "$failed"
 
+# `cargo sort` is not as readily available as other commands,
+# thus we make this test optional
+if cargo --list | grep "^\\s\+sort\(\\s\|\$\)" -q
+then
 echo
 echo
 echo "TEST: 'cargo sort' - Check Cargo.toml dependencies order ..."
@@ -54,6 +58,7 @@ cargo sort --check || failed=1
 failures=$((failures + failed))
 tests=$((tests + 1))
 _report_test_res "$failed"
+fi
 
 echo
 echo
