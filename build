@@ -16,6 +16,13 @@ source "$script_dir/env"
 if [ -z "${TARGET_FLAGS_ARRAY:-}" ]
 then
 	TARGET_FLAGS_ARRAY=()
+	TARGET_FLAGS_ARRAY+=("--target=x86_64-unknown-linux-musl")
+	if ! which musl-gcc > /dev/null
+	then
+		>&2 echo "ERROR: Trying to compile with MUSL (system independent binaries), \
+			but 'musl-gcc is not installed!'"
+		exit 2
+	fi
 fi
 $CARGO build --verbose --release "${TARGET_FLAGS_ARRAY[@]}"
 
