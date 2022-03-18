@@ -103,17 +103,8 @@ CARGO="${CARGO:-cargo}"
 var_names+=("CARGO")
 
 # When CARGO is set to CROSS, this is set to `--target matrix.target`.
-TARGET_FLAGS="${TARGET_FLAGS:-}"
-IFS=' ' read -r -a TARGET_FLAGS_ARRAY <<< "$TARGET_FLAGS"
-if [ -n "${TARGET_FLAGS_ARRAY:-}" ]
-then
-	var_names+=("TARGET_FLAGS_ARRAY")
-	# echo set array
-	# TARGET_FLAGS_ARRAY=""
-	# echo "${TARGET_FLAGS_ARRAY[*]}"
-fi
-#echo "${TARGET_FLAGS_ARRAY[@]}"
-var_names+=("TARGET_FLAGS")
+TARGET_FLAG="${TARGET_FLAG:-}"
+var_names+=("TARGET_FLAG")
 
 # Emit backtraces on panics.
 RUST_BACKTRACE=1

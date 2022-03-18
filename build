@@ -13,18 +13,34 @@ script_dir=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
 # shellcheck source=./env
 source "$script_dir/env"
 
-if [ -z "${TARGET_FLAGS_ARRAY:-}" ]
+if ! [ "${1:-}" == "--skip-musl" ]
 then
-	TARGET_FLAGS_ARRAY=()
-	TARGET_FLAGS_ARRAY+=("--target=x86_64-unknown-linux-musl")
-	if ! which musl-gcc > /dev/null
+	if [ -z "${TARGET_FLAG:-}" ]
 	then
-		>&2 echo "ERROR: Trying to compile with MUSL (system independent binaries), \
-			but 'musl-gcc is not installed!'"
-		exit 2
+		TARGET_FLAG="--target=x86_64-unknown-linux-musl"
+		if ! which musl-gcc > /dev/null
+		then
+			>&2 print "\
+ERROR: Trying to compile with MUSL (system independent binaries), \
+but 'musl-gcc' is not installed!\n\
+Install it (pkg: 'musl-tools'), or use --skip-musl, \
+to compile against native libc."
+			exit 2
+		fi
+	else
+		>&2 echo "\
+ERROR: Trying to set target to MUSL (--skip-musl was not given), \
+but TARGET_FLAG is already set!"
+		exit 3
 	fi
 fi
-$CARGO build --verbose --release "${TARGET_FLAGS_ARRAY[@]}"
+
+CARGO_FLAGS=()
+if [ -n "$TARGET_FLAG" ]
+then
+	CARGO_FLAGS+=("$TARGET_FLAG")
+fi
+$CARGO build --verbose --release "${CARGO_FLAGS[@]}"
 
 if [ -f "$BINARY_PATH" ]
 then
