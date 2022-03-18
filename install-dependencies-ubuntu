@@ -10,8 +10,6 @@ set -Eeuo pipefail
 
 sudo apt-get update
 sudo apt-get install -y --no-install-recommends \
-  liblz4-tool \
-  musl-tools \
-  wget \
-  xz-utils
+	build-essential \
+	musl-tools
 
