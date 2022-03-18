@@ -86,7 +86,7 @@ var_names+=("OUR_VERSION")
 VERSION="$OUR_VERSION"
 var_names+=("VERSION")
 
-# Target sppecifics (arch, os, base-lib, ...)
+# Target specifics (arch, os, base-lib, ...)
 TARGET="${TARGET:-}"
 var_names+=("TARGET")
 
