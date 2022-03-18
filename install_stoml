@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# SPDX-FileCopyrightText: 2022 Robin Vobruba <hoijui.quaero@gmail.com>
+#
+# SPDX-License-Identifier: Unlicense
+
+# Exit immediately on each error and unset variable;
+# see: https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
+set -Eeuo pipefail
+#set -Eeu
+
+loc_tools_dir="target/tools"
+loc_stoml_path="$loc_tools_dir/stoml"
+stoml_version="${STOML_VERSION:-${1:-0.7.0}}"
+
+if ! which stoml
+then
+	echo "Install STOML (BASH TOML parser) v$stoml_version ..."
+	mkdir -p "$loc_tools_dir"
+	curl "https://github.com/freshautomations/stoml/releases/download/v$stoml_version/stoml_linux_amd64" \
+		--fail \
+		--location \
+		--output "$loc_stoml_path"
+	chmod +x "$loc_stoml_path"
+	# This we need only for within this script
+	PATH="$PATH:$loc_tools_dir"
+	# As the above "which stoml" did not output anything,
+	# we show the path now
+	echo "$loc_stoml_path"
+fi
+
+stoml --version

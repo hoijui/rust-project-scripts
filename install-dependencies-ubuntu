@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-
-# SPDX-FileCopyrightText: 2021 Robin Vobruba <hoijui.quaero@gmail.com>
+# SPDX-FileCopyrightText: 2022 Robin Vobruba <hoijui.quaero@gmail.com>
 #
 # SPDX-License-Identifier: Unlicense
 
@@ -16,10 +15,3 @@ sudo apt-get install -y --no-install-recommends \
   wget \
   xz-utils
 
-if ! which stoml
-then
-	mkdir -p target/tools
-	wget "https://github.com/freshautomations/stoml/releases/download/v0.7.0/stoml_linux_amd64" \
-		-O stoml
-	chmod +x target/tools/stoml
-fi
