@@ -18,15 +18,6 @@ then
 	if [ -z "${TARGET_FLAG:-}" ]
 	then
 		TARGET_FLAG="--target=x86_64-unknown-linux-musl"
-		if ! which musl-gcc > /dev/null
-		then
-			>&2 print "\
-ERROR: Trying to compile with MUSL (system independent binaries), \
-but 'musl-gcc' is not installed!\n\
-Install it (pkg: 'musl-tools'), or use --skip-musl, \
-to compile against native libc."
-			exit 2
-		fi
 	else
 		>&2 echo "\
 ERROR: Trying to set target to MUSL (--skip-musl was not given), \
