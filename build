@@ -13,7 +13,15 @@ script_dir=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
 # shellcheck source=./env
 source "$script_dir/env"
 
-if ! [ "${1:-}" == "--skip-musl" ]
+uname_out="$(uname -s)"
+case "$uname_out" in
+	Linux*)
+		linux=true;;
+	*)
+		linux=false
+esac
+
+if $linux && ! [ "${1:-}" == "--skip-musl" ]
 then
 	if [ -z "${TARGET_FLAG:-}" ]
 	then
