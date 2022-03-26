@@ -120,7 +120,7 @@ var_names+=("IS_WIN")
 
 STAGING="$NAME-$VERSION"
 # When CARGO is set to CROSS, TARGET_DIR includes matrix.target.
-TARGET_DIR="./target"
+TARGET_DIR="${TARGET_DIR:-./target}"
 if [ -n "$TARGET" ]
 then
   #TARGET="$OSTYPE-$(uname -m)"
