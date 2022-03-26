@@ -41,6 +41,10 @@ then
 fi
 $CARGO build --verbose --release "${CARGO_FLAGS[@]}"
 
+if [ -f "$BINARY_PATH_MUSL" ]
+then
+	strip "$BINARY_PATH_MUSL"
+fi
 if [ -f "$BINARY_PATH" ]
 then
 	strip "$BINARY_PATH"
