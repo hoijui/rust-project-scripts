@@ -27,16 +27,21 @@ find . -maxdepth 1 \
     \) \
     -exec cp -r {} "$TARGET_DIR/$STAGING/" \;
 
-if [ ! -e "$BINARY_PATH" ]
+if [ ! -e "$BINARY_PATH_MUSL" ] && [ ! -e "$BINARY_PATH" ]
 then
   {
-    echo "ERROR: Binary ('$BINARY_PATH') does not exist!"
+    echo "ERROR: Binary ('$BINARY_PATH_MUSL' or '$BINARY_PATH') does not exist!"
     echo "       Maybe you forgot to build it (using 'script/build' or 'cargo build --release')?"
   } >&2
   exit 1
 fi
 
-cp "$BINARY_PATH" "$TARGET_DIR/$STAGING/"
+if [ -e "$BINARY_PATH_MUSL" ]
+then
+  cp "$BINARY_PATH_MUSL" "$TARGET_DIR/$STAGING/"
+else
+  cp "$BINARY_PATH" "$TARGET_DIR/$STAGING/"
+fi
 
 OLD_DIR="$(pwd)"
 cd "$TARGET_DIR"

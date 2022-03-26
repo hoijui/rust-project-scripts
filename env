@@ -141,6 +141,10 @@ BINARY_DIR="$TARGET_DIR/release"
 BINARY_PATH="$BINARY_DIR/$BINARY"
 var_names+=("BINARY_DIR")
 var_names+=("BINARY_PATH")
+BINARY_DIR_MUSL="$TARGET_DIR/x86_64-unknown-linux-musl/release"
+BINARY_PATH_MUSL="$BINARY_DIR_MUSL/$BINARY"
+var_names+=("BINARY_DIR_MUSL")
+var_names+=("BINARY_PATH_MUSL")
 
 if $IS_WIN
 then
