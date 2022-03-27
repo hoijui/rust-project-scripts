@@ -18,6 +18,7 @@ source "$script_dir/env"
 # initial default values
 APP_NAME="Rust project build script"
 musl=true
+strip=true
 
 function print_help() {
 
@@ -32,6 +33,7 @@ function print_help() {
 	echo "Options:"
 	echo "  -h, --help              Show this help message"
 	echo "  --skip-musl             Do not build for MUSL, but for the native target"
+	echo "  --skip-strip            Do not strip the debug-symbols from the resulting binary"
 	echo "Examples:"
 	echo "  $script_name"
 	echo "  $script_name --skip-musl"
@@ -51,6 +53,9 @@ do
 			;;
 		--skip-musl)
 			musl=false
+			;;
+		--skip-strip)
+			strip=false
 			;;
 		*) # non-/unknown option
 			POSITIONAL+=("$arg") # save it in an array for later
@@ -87,11 +92,14 @@ then
 fi
 $CARGO build --verbose --release "${CARGO_FLAGS[@]}"
 
-if [ -f "$BINARY_PATH_MUSL" ]
+if $strip
 then
-	strip "$BINARY_PATH_MUSL"
-fi
-if [ -f "$BINARY_PATH" ]
-then
-	strip "$BINARY_PATH"
+	if [ -f "$BINARY_PATH_MUSL" ]
+	then
+		strip "$BINARY_PATH_MUSL"
+	fi
+	if [ -f "$BINARY_PATH" ]
+	then
+		strip "$BINARY_PATH"
+	fi
 fi
