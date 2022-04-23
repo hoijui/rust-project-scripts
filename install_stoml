@@ -11,12 +11,14 @@ set -Eeuo pipefail
 loc_tools_dir="target/tools"
 loc_stoml_path="$loc_tools_dir/stoml"
 stoml_version="${STOML_VERSION:-${1:-0.7.0}}"
+stoml_gh_slug="freshautomations/stoml"
+stoml_dl_url="https://github.com/$stoml_gh_slug/releases/download/v$stoml_version/stoml_linux_amd64"
 
 if ! which stoml
 then
 	echo "Install STOML (BASH TOML parser) v$stoml_version ..."
 	mkdir -p "$loc_tools_dir"
-	curl "https://github.com/freshautomations/stoml/releases/download/v$stoml_version/stoml_linux_amd64" \
+	curl "$stoml_dl_url" \
 		--fail \
 		--location \
 		--output "$loc_stoml_path"
