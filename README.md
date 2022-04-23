@@ -13,8 +13,25 @@ SPDX-License-Identifier: CC0-1.0
     https://api.reuse.software/badge/github.com/hoijui/rust-project-scripts)](
     https://api.reuse.software/info/github.com/hoijui/rust-project-scripts)
 
-Scripts to build, test, clean and more for a simple Rust(lang) project,
-useful for both local deving and CI.
+Scripts to build, test, clean and more,
+for a simple Rust(lang) project;
+useful for both local dev'ing and CI.
+
+By default, these scripts build using MUSL.
+That means, that the resulting binary is usable
+on any 64bit Linux system.
+It also means, that we need some more tooling installed,
+and that projects to be built have to be configured
+to be MUSL buildable; the later mainly means,
+choosing the right dependencies
+and disabling features of deps. and sub-deps.
+
+*Alternatively* you may also use Cargo directly, to make a simple,
+local-system dependent build:
+
+```sh
+cargo build --release
+```
 
 ## Usage
 
