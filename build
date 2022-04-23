@@ -22,7 +22,7 @@ strip=true
 
 function print_help() {
 
-	script_name="$(basename "$0")"
+	local script_name="$(basename "$0")"
 	echo "$APP_NAME - Simply builds the current project."
 	echo "By default, it tries to create a MUSL build,"
 	echo "which is compatible with all Linux 64bit systems."
