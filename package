@@ -58,4 +58,6 @@ else
   tar czf "$PACKAGE_ARCHIVE" "$STAGING"
 fi
 
+echo "Archive created: '$TARGET_DIR/$PACKAGE_ARCHIVE'"
+
 cd "$OLD_DIR"
