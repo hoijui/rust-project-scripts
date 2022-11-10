@@ -110,7 +110,10 @@ git tag -a -m "Release $NAME version $new_version" "$new_version"
 
 if $push
 then
-  git push origin --tags master
+  branch_name="$(git symbolic-ref HEAD 2>/dev/null)" \
+    || branch_name="(unnamed branch)" # detached HEAD
+  branch_name="${branch_name##refs/heads/}"
+  git push origin --tags "$branch_name"
 else
   echo "Ready to release with:"
   echo "git push origin --tags master"
