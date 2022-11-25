@@ -29,10 +29,18 @@ find . -maxdepth 1 \
 
 if [ ! -e "$BINARY_PATH_MUSL" ] && [ ! -e "$BINARY_PATH" ]
 then
-  {
-    echo "ERROR: Binary ('$BINARY_PATH_MUSL' or '$BINARY_PATH') does not exist!"
-    echo "       Maybe you forgot to build it (using 'script/build' or 'cargo build --release')?"
-  } >&2
+  if [ -f "src/main.rs" ]
+  then
+    {
+      echo "ERROR: Binary ('$BINARY_PATH_MUSL' or '$BINARY_PATH') does not exist!"
+      echo "       Maybe you forgot to build it (using 'script/build' or 'cargo build --release')?"
+    } >&2
+  else
+    {
+      echo "ERROR: Rust libraries should not be packaged, but rather released with cargo,"
+      echo "       or referenced in 'Cargo.toml' through a local path or their git repo URL."
+    } >&2
+  fi
   exit 1
 fi
 
