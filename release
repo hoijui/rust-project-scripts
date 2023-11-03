@@ -26,8 +26,10 @@ function print_help() {
 	echo "Usage:"
 	echo "  $script_name [OPTION...] [NEW-VERSION]"
 	echo "Options:"
-	echo "  -p, --push              Also push commit and tag to origin"
-	echo "  -h, --help              Print this usage help and exit"
+	echo "  -h, --help"
+	echo "    Show this help message and exit"
+	echo "  -p, --push"
+	echo "    Also push commit and tag to origin"
 	echo "Examples:"
 	echo "  $script_name"
 }

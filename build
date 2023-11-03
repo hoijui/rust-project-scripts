@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 
-# SPDX-FileCopyrightText: 2021 Robin Vobruba <hoijui.quaero@gmail.com>
+# SPDX-FileCopyrightText: 2021 - 2023 Robin Vobruba <hoijui.quaero@gmail.com>
 #
 # SPDX-License-Identifier: Unlicense
-
-# See the output of "$0 -h" for more details.
 
 # Exit immediately on each error and unset variable;
 # see: https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
@@ -31,9 +29,12 @@ function print_help() {
 	echo "Usage:"
 	echo "  $script_name [OPTION...]"
 	echo "Options:"
-	echo "  -h, --help              Show this help message"
-	echo "  --skip-musl             Do not build for MUSL, but for the native target"
-	echo "  --skip-strip            Do not strip the debug-symbols from the resulting binary"
+	echo "  -h, --help"
+	echo "    Show this help message and exit"
+	echo "  --skip-musl"
+	echo "    Do not build for MUSL, but for the native target"
+	echo "  --skip-strip"
+	echo "    Do not strip the debug-symbols from the resulting binary"
 	echo "Examples:"
 	echo "  $script_name"
 	echo "  $script_name --skip-musl"

@@ -4,8 +4,6 @@
 #
 # SPDX-License-Identifier: Unlicense
 
-# See the output of "$0 -h" for more details.
-
 # Exit immediately on each error and unset variable;
 # see: https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
 set -Eeuo pipefail
@@ -30,7 +28,8 @@ function print_help() {
 	echo "Usage:"
 	echo "  $script_name [OPTION...]"
 	echo "Options:"
-	echo "  -h, --help              Show this help message"
+	echo "  -h, --help"
+	echo "    Show this help message and exit"
 	echo "Examples:"
 	echo "  $script_name"
 	echo "  $script_name --help"
