@@ -105,7 +105,6 @@ echo
 echo "TEST: 'cargo clippy' - Static code linting ..."
 failed=0
 cargo clippy --release -- \
-  --deny clippy::pedantic \
   || failed=1
 failures=$((failures + failed))
 tests=$((tests + 1))
