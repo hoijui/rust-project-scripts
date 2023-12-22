@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# SPDX-FileCopyrightText: 2021 Robin Vobruba <hoijui.quaero@gmail.com>
+# SPDX-FileCopyrightText: 2021 - 2023 Robin Vobruba <hoijui.quaero@gmail.com>
 #
 # SPDX-License-Identifier: Unlicense
 
@@ -78,8 +78,10 @@ then
   exit 3
 fi
 
-# Set new version in Cargo.toml
-sed -i -e 's|^version[ \t]*=[ \t]*".*"$|version = "'"$new_version"'"|g' "Cargo.toml"
+# Set new version in Cargo.toml files
+find . -name "Cargo.toml" -not -path "./target/*" -print0 \
+  | xargs -0 sed -i \
+    -e 's|^version[ \t]*=[ \t]*".*"$|version = "'"$new_version"'"|g'
 
 # Set new version in Cargo.lock
 awk -e "
@@ -106,7 +108,8 @@ BEGIN {
 mv "Cargo.lock.tmp" "Cargo.lock"
 grep -A 1 "$NAME" < "Cargo.lock" || true
 
-git add Cargo.toml Cargo.lock
+find . -name "Cargo.toml" -not -path "./target/*" -print0 \
+  | xargs -0 git add Cargo.lock
 git commit -m "Switch our version to $new_version"
 git tag -a -m "Release $NAME version $new_version" "$new_version"
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# SPDX-FileCopyrightText: 2021 Robin Vobruba <hoijui.quaero@gmail.com>
+# SPDX-FileCopyrightText: 2021 - 2023 Robin Vobruba <hoijui.quaero@gmail.com>
 #
 # SPDX-License-Identifier: Unlicense
 
@@ -77,7 +77,7 @@ VERSION="${VERSION:-$($STOML "$CARGO_TOML" package.version)}"
 var_names+=("VERSION")
 
 # Binary name
-BINARY="${BINARY:-$NAME}"
+BINARY="${BINARY:-$(cargo metadata --format-version 1 --no-deps | jq -r '.packages[].targets[] | select( .kind | map(. == "bin") | any ) | .name')}"
 var_names+=("BINARY")
 
 # Our version
@@ -120,7 +120,7 @@ var_names+=("IS_WIN")
 
 STAGING="$NAME-$VERSION"
 # When CARGO is set to CROSS, TARGET_DIR includes matrix.target.
-TARGET_DIR="${TARGET_DIR:-target}"
+TARGET_DIR="${TARGET_DIR:-$(cargo metadata --format-version 1 --no-deps | jq -r '.target_directory')}"
 if [ -n "$TARGET" ]
 then
   #TARGET="$OSTYPE-$(uname -m)"
