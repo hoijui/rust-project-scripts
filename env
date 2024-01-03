@@ -158,6 +158,11 @@ else
 fi
 var_names+=("PACKAGE_ARCHIVE")
 
+if [ -n "$ENV_FILE" ]
+then
+  mkdir -p "$(dirname "$ENV_FILE")"
+fi
+
 for var_name in "${var_names[@]}"
 do
   if [ "${OUTPUT:-}" = "true" ]
