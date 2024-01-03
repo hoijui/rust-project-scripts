@@ -15,6 +15,7 @@ source "$script_dir/env"
 
 # initial default values
 APP_NAME="Rust project build script"
+TARGET_FLAG_MUSL="--target=x86_64-unknown-linux-musl"
 musl=true
 strip=true
 
@@ -75,9 +76,9 @@ esac
 
 if $linux && $musl
 then
-	if [ -z "${TARGET_FLAG:-}" ]
+	if [ -z "${TARGET_FLAG:-}" ] || [ "${TARGET_FLAG}" = "$TARGET_FLAG_MUSL" ]
 	then
-		TARGET_FLAG="--target=x86_64-unknown-linux-musl"
+		TARGET_FLAG="$TARGET_FLAG_MUSL"
 	else
 		>&2 echo "\
 ERROR: Trying to set target to MUSL (--skip-musl was not given), \
