@@ -80,10 +80,6 @@ var_names+=("VERSION")
 BINARY="${BINARY:-$(cargo metadata --format-version 1 --no-deps | jq -r '.packages[].targets[] | select( .kind | map(. == "bin") | any ) | .name')}"
 var_names+=("BINARY")
 
-# cargo target names
-CARGO_TARGETS="${CARGO_TARGETS:-$(cargo metadata --format-version 1 --no-deps | jq -r '.workspace_members[] | sub(" .*"; "")' | tr '\n' ' ' | sed -e 's/ $/\n/')}"
-var_names+=("CARGO_TARGETS")
-
 # Our version
 OUR_VERSION="${OUR_VERSION:-$(_our_version "$script_dir/..")}"
 var_names+=("OUR_VERSION")
@@ -158,11 +154,6 @@ else
 fi
 var_names+=("PACKAGE_ARCHIVE")
 
-if [ -n "$ENV_FILE" ]
-then
-  mkdir -p "$(dirname "$ENV_FILE")"
-fi
-
 for var_name in "${var_names[@]}"
 do
   if [ "${OUTPUT:-}" = "true" ]
@@ -171,7 +162,7 @@ do
   fi
   if [ -n "$ENV_FILE" ]
   then
-    echo "$var_name=\"${!var_name}\"" >> "$ENV_FILE"
+    echo "$var_name=${!var_name}" >> "$ENV_FILE"
   fi
 done
 
