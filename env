@@ -80,6 +80,10 @@ var_names+=("VERSION")
 BINARY="${BINARY:-$(cargo metadata --format-version 1 --no-deps | jq -r '.packages[].targets[] | select( .kind | map(. == "bin") | any ) | .name')}"
 var_names+=("BINARY")
 
+# cargo target names
+CARGO_TARGETS="${CARGO_TARGETS:-$(cargo metadata --format-version 1 --no-deps | jq -r '.workspace_members[] | sub(" .*"; "")' | tr '\n' ' ' | sed -e 's/ $/\n/')}"
+var_names+=("CARGO_TARGETS")
+
 # Our version
 OUR_VERSION="${OUR_VERSION:-$(_our_version "$script_dir/..")}"
 var_names+=("OUR_VERSION")
