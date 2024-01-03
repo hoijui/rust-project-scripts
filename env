@@ -162,11 +162,11 @@ for var_name in "${var_names[@]}"
 do
   if [ "${OUTPUT:-}" = "true" ]
   then
-    echo "$var_name=${!var_name}"
+    echo "$var_name=\"${!var_name}\""
   fi
   if [ -n "$ENV_FILE" ]
   then
-    echo "$var_name=${!var_name}" >> "$ENV_FILE"
+    echo "$var_name=\"${!var_name}\"" >> "$ENV_FILE"
   fi
 done
 
