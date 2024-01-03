@@ -78,38 +78,14 @@ then
   exit 3
 fi
 
-# Set new version in Cargo.toml files
-find . -name "Cargo.toml" -not -path "./target/*" -print0 \
-  | xargs -0 sed -i \
-    -e 's|^version[ \t]*=[ \t]*".*"$|version = "'"$new_version"'"|g'
+# Set new version in Cargo.toml and Cargo.lock file(s)
+# NOTE Requires cargo-edit; install it with:
+#      `cargo install cargo-edit`
+cargo set-version --workspace "$new_version"
 
-# Set new version in Cargo.lock
-awk -e "
-BEGIN {
-  found = 0
-  replaced = 0
-}
-/^name = \"$NAME\"$/ {
-  if (!replaced) {
-    found = 1
-  }
-}
-/^version = \".*\"$/ {
-  if (found) {
-    gsub(\"\\\".*\\\"\", \"\\\"$new_version\\\"\", \$0)
-    replaced = 1
-    found = 0
-  }
-}
-{
-  print(\$0)
-}
-" < "Cargo.lock" > "Cargo.lock.tmp"
-mv "Cargo.lock.tmp" "Cargo.lock"
-grep -A 1 "$NAME" < "Cargo.lock" || true
-
-find . -name "Cargo.toml" -not -path "./target/*" -print0 \
-  | xargs -0 git add Cargo.lock
+# Records the changes in git history
+find . \( -name "Cargo.toml" -o -name "Cargo.lock" \) -not -path "./target/*" -print0 \
+  | xargs -0 git add
 git commit -m "Switch our version to $new_version"
 git tag -a -m "Release $NAME version $new_version" "$new_version"
 
