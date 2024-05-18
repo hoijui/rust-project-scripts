@@ -36,22 +36,31 @@ cargo build --release
 ## Usage
 
 In your Rust(lang) project,
-include this repo as a submodule:
+either:
 
-```bash
-git submodule add https://github.com/hoijui/rust-project-scripts.git scripts
-```
+1. include this repo as a submodule:
+
+    ```bash
+    git submodule add https://github.com/hoijui/rust-project-scripts.git run
+    ```
+
+2. or as an untracked, ignored dir (recommended):
+
+    ```bash
+    git clone https://github.com/hoijui/rust-project-scripts.git run
+    if ! grep -q -r "^/run/\$" .git/info/exclude; then echo '/run/' >> .git/info/exclude; fi
+    ```
 
 From then on, you can use the scripts like this:
 
 ```bash
-scripts/build
+run/build
 ```
 
 or
 
 ```bash
-scripts/test
+run/test
 ```
 
 ## Projects
