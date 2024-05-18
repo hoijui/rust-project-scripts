@@ -117,11 +117,18 @@ echo "TEST: 'cargo doc-code(-tests)' - Building documentaiton and running docu c
 # For more, see the chapter on documentation tests:
 # https://doc.rust-lang.org/rustdoc/documentation-tests.html
 failed=0
+if [ -f "src/lib.rs" ]
+then
+  # This only tests the library, but fails if the project is/has no library
+  doc_target="--doc"
+else
+  doc_target="--all-targets"
+fi
 if $debug
 then
-  cargo test --release --doc -- --show-output || failed=1
+  cargo test --release $doc_target -- --show-output || failed=1
 else
-  cargo test --release --doc || failed=1
+  cargo test --release $doc_target || failed=1
 fi
 failures=$((failures + failed))
 tests=$((tests + 1))
