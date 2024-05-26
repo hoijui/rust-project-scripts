@@ -27,28 +27,32 @@ find . -maxdepth 1 \
     \) \
     -exec cp -r {} "$TARGET_DIR/$STAGING/" \;
 
-if [ ! -e "$BINARY_PATH_MUSL" ] && [ ! -e "$BINARY_PATH" ]
+# If this is a library-only crate, we skip all the BINARY related stuff
+if [ -n "$BINARY" ]
 then
-  if [ -f "src/main.rs" ] || [ -f "bin/src/main.rs" ]
+  if [ ! -e "$BINARY_PATH_MUSL" ] && [ ! -e "$BINARY_PATH" ]
   then
-    {
-      echo "ERROR: Binary ('$BINARY_PATH_MUSL' or '$BINARY_PATH') does not exist!"
-      echo "       Maybe you forgot to build it (using '$script_dir/build' or 'cargo build --release')?"
-    } >&2
-  else
-    {
-      echo "ERROR: Rust libraries should not be packaged, but rather released with cargo,"
-      echo "       or referenced in 'Cargo.toml' through a local path or their git repo URL."
-    } >&2
+    if [ -f "src/main.rs" ] || [ -f "bin/src/main.rs" ]
+    then
+      {
+        echo "ERROR: Binary ('$BINARY_PATH_MUSL' or '$BINARY_PATH') does not exist!"
+        echo "       Maybe you forgot to build it (using '$script_dir/build' or 'cargo build --release')?"
+      } >&2
+    else
+      {
+        echo "ERROR: Rust libraries should not be packaged, but rather released with cargo,"
+        echo "       or referenced in 'Cargo.toml' through a local path or their git repo URL."
+      } >&2
+    fi
+    exit 1
   fi
-  exit 1
-fi
 
-if [ -e "$BINARY_PATH_MUSL" ]
-then
-  cp "$BINARY_PATH_MUSL" "$TARGET_DIR/$STAGING/"
-else
-  cp "$BINARY_PATH" "$TARGET_DIR/$STAGING/"
+  if [ -e "$BINARY_PATH_MUSL" ]
+  then
+    cp "$BINARY_PATH_MUSL" "$TARGET_DIR/$STAGING/"
+  else
+    cp "$BINARY_PATH" "$TARGET_DIR/$STAGING/"
+  fi
 fi
 
 OLD_DIR="$(pwd)"
