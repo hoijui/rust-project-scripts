@@ -10,7 +10,24 @@ set -Eeuo pipefail
 #set -Eeu
 
 script_dir=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
-proj_dir=$(cd "$script_dir/.."; pwd)
+
+function _find_file_upwards() {
+  local search_dir_l="$1"
+  local file_name="${2:-Cargo.toml}"
+
+  local cur_dir
+  cur_dir="$(cd "$search_dir_l"; pwd)"
+  while [ -n "$cur_dir" ]
+  do
+    if [ -f "$cur_dir/$file_name" ]
+    then
+      echo "$cur_dir/$file_name"
+      return 0
+    fi
+    cur_dir="${cur_dir%\/*}"
+  done
+  return 1
+}
 
 function _is_win() {
 
@@ -46,6 +63,7 @@ function _our_version() {
   fi
 }
 
+proj_dir="$(dirname "$(_find_file_upwards "$(pwd)" "Cargo.toml")")"
 var_names=()
 set -a # All variables get exported when set, even without 'export' in front
 
