@@ -56,10 +56,12 @@ set -- "${POSITIONAL[@]}" # restore positional parameters
 
 tests=0
 failures=0
+failed_tests=()
 
 function _report_test_res() {
   res="$1"
-  echo -n "TEST: "
+  t_human_id="$2"
+  echo -n "TEST: $t_human_id: "
   if [ "$res" -eq 0 ]
   then
     echo "succeeded."
@@ -70,49 +72,70 @@ function _report_test_res() {
 
 echo
 echo
-echo "TEST: 'cargo test' - Run unit-tests ..."
+t_human_id="'cargo test' - Run unit-tests"
+echo "TEST: $t_human_id"
 failed=0
 cargo test --release || failed=1
 failures=$((failures + failed))
 tests=$((tests + 1))
-_report_test_res "$failed"
+_report_test_res "$failed" "$t_human_id"
+if [ "$failed" = "1" ]
+then
+	failed_tests+=("$t_human_id")
+fi
 
 echo
 echo
-echo "TEST: 'cargo fmt' - Check source code formatting ..."
+t_human_id="'cargo fmt' - Check source code formatting"
+echo "TEST: $t_human_id"
 failed=0
 cargo fmt -- --check || failed=1
 failures=$((failures + failed))
 tests=$((tests + 1))
-_report_test_res "$failed"
+_report_test_res "$failed" "$t_human_id"
+if [ "$failed" = "1" ]
+then
+	failed_tests+=("$t_human_id")
+fi
 
 # `cargo sort` is not as readily available as other commands,
 # thus we make this test optional
 if cargo --list | grep "^\\s\+sort\(\\s\|\$\)" -q
 then
-echo
-echo
-echo "TEST: 'cargo sort' - Check Cargo.toml dependencies order ..."
-failed=0
-cargo sort --check || failed=1
-failures=$((failures + failed))
-tests=$((tests + 1))
-_report_test_res "$failed"
+	echo
+	echo
+	t_human_id="'cargo sort' - Check Cargo.toml dependencies order"
+	echo "TEST: $t_human_id"
+	failed=0
+	cargo sort --check || failed=1
+	failures=$((failures + failed))
+	tests=$((tests + 1))
+	_report_test_res "$failed" "$t_human_id"
+	if [ "$failed" = "1" ]
+	then
+		failed_tests+=("$t_human_id")
+	fi
 fi
 
 echo
 echo
-echo "TEST: 'cargo clippy' - Static code linting ..."
+t_human_id="'cargo clippy' - Static code linting"
+echo "TEST: $t_human_id"
 failed=0
 cargo clippy --release -- \
   || failed=1
 failures=$((failures + failed))
 tests=$((tests + 1))
-_report_test_res "$failed"
+_report_test_res "$failed" "$t_human_id"
+if [ "$failed" = "1" ]
+then
+	failed_tests+=("$t_human_id")
+fi
 
 echo
 echo
-echo "TEST: 'cargo doc-code(-tests)' - Building documentaiton and running docu code ..."
+t_human_id="'cargo doc-code(-tests)' - Building documentaiton and running docu code"
+echo "TEST: $t_human_id"
 # This flag will run your code examples as tests.
 # For more, see the chapter on documentation tests:
 # https://doc.rust-lang.org/rustdoc/documentation-tests.html
@@ -132,18 +155,27 @@ else
 fi
 failures=$((failures + failed))
 tests=$((tests + 1))
-_report_test_res "$failed"
+_report_test_res "$failed" "$t_human_id"
+if [ "$failed" = "1" ]
+then
+	failed_tests+=("$t_human_id")
+fi
 
 echo
 echo
-echo "TEST: 'REUSE' - Licensing meta-data check ..."
+t_human_id="'REUSE' - Licensing meta-data check"
+echo "TEST: $t_human_id"
 if which reuse > /dev/null
 then
   failed=0
   reuse lint || failed=1
   failures=$((failures + failed))
   tests=$((tests + 1))
-  _report_test_res "$failed"
+  _report_test_res "$failed" "$t_human_id"
+	if [ "$failed" = "1" ]
+	then
+		failed_tests+=("$t_human_id")
+	fi
 else
   >&2 echo "WARNING: REUSE tool not found; skipping licensing meta-data check."
 fi
@@ -155,7 +187,13 @@ if [ $failures -eq 0 ]
 then
   echo "All tests successfull!"
 else
-  >&2 echo "There were test failures!"
+  {
+	echo "There were $failures test failures:"
+	for failed_test_id in "${failed_tests[@]}"
+	do
+		echo "- $failed_test_id"
+	done
+  } >&2
 fi
 
 exit $failures
