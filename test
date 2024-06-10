@@ -15,7 +15,8 @@ debug=false
 
 function print_help() {
 
-	local script_name="$(basename "$0")"
+	local script_name
+	script_name="$(basename "$0")"
 	echo "$APP_NAME -"
 	echo "We run all tests, even if some are failing."
 	echo
