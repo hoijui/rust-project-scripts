@@ -72,10 +72,17 @@ function _report_test_res() {
 
 echo
 echo
-t_human_id="'cargo test' - Run unit-tests"
+# Checks if 'nextest' is installed
+if cargo nextest help &> /dev/null
+then
+	c_test_type="nextest"
+else
+	c_test_type="test"
+fi
+t_human_id="'cargo $c_test_type' - Run unit-tests"
 echo "TEST: $t_human_id"
 failed=0
-cargo nextest --release || failed=1
+cargo "$c_test_type" --release || failed=1
 failures=$((failures + failed))
 tests=$((tests + 1))
 _report_test_res "$failed" "$t_human_id"
