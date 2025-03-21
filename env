@@ -67,7 +67,7 @@ proj_dir="$(dirname "$(_find_file_upwards "$(pwd)" "Cargo.toml")")"
 var_names=()
 set -a # All variables get exported when set, even without 'export' in front
 
-# STOML is a simple TOML parser fo BASH.
+# STOML is a simple TOML parser for BASH.
 # We use it to parse Cargo.toml.
 # see: https://github.com/freshautomations/stoml/
 STOML="$(which stoml || true)"
