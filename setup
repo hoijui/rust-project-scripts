@@ -28,6 +28,8 @@ function print_help() {
 	echo "Options:"
 	echo "  -h, --help"
 	echo "    Show this help message and exit"
+	echo "  --install-dir <DIR>"
+	echo "    Overwrites the install dir location [default: ''$install_dir_rel']"
 	echo "Examples:"
 	echo "  $script_name"
 	echo "  $script_name --help"
@@ -44,6 +46,10 @@ do
 		-h|--help)
 			print_help
 			exit 0
+			;;
+		--install-dir)
+			install_dir_rel="$1"
+			shift
 			;;
 		*) # non-/unknown option
 			POSITIONAL+=("$arg") # save it in an array for later
