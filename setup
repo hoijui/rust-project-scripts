@@ -72,12 +72,12 @@ fi
 
 local_git_ignore_file="$install_dir_rel/.git/info/exclude"
 >&2 echo "INFO: Ensure the build scripts are marked as git-ignored (locally/untracked) ..."
-if grep -q -r "^/run/rp/\$" "$local_git_ignore_file"
+if grep -q -r "^/$install_dir_rel/\$" "$local_git_ignore_file"
 then
     >&2 echo "INFO: Already ignored - skipping."
 else
     >&2 echo "INFO: Setting up the ignore ..."
-    echo '/run/rp/' >> "$local_git_ignore_file"
+    echo "/$install_dir_rel/" >> "$local_git_ignore_file"
     >&2 echo "INFO: Setting up the ignore - done."
 fi
 >&2 echo "INFO: Ensure the build scripts are marked as git-ignored (locally/untracked) - done."
