@@ -16,7 +16,6 @@ script_name="$(basename "$script_path")"
 APP_NAME="Rust project build scripts setup tool"
 project_root="$(pwd)"
 install_dir_rel='run/rp'
-install_dir="$project_root/run/rp"
 
 function print_help() {
 
@@ -52,6 +51,8 @@ do
 	esac
 done
 set -- "${POSITIONAL[@]}" # restore positional parameters
+
+install_dir="$project_root/$install_dir_rel"
 
 if [ -e "$install_dir" ]
 then
