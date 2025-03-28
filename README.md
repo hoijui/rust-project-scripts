@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2021 Robin Vobruba <hoijui.quaero@gmail.com>
+SPDX-FileCopyrightText: 2021-2025 Robin Vobruba <hoijui.quaero@gmail.com>
 
 SPDX-License-Identifier: CC0-1.0
 -->
@@ -14,15 +14,15 @@ SPDX-License-Identifier: CC0-1.0
     https://api.reuse.software/info/github.com/hoijui/rust-project-scripts)
 
 Scripts to build, test, clean and more,
-for a simple Rust(lang) project;
+for a simple [Rust(lang)][Rust] project;
 useful for both local dev'ing and CI.
 
-By default, these scripts build using MUSL.
-That means, that the resulting binary is usable
+By default, these scripts build using [MUSL].
+That means that the resulting binary is usable
 on any 64bit Linux system.
 It also means, that we need some more tooling installed,
 and that projects to be built have to be configured
-to be MUSL buildable; the later mainly means,
+to be [MUSL] buildable; the later mainly means,
 choosing the right dependencies
 and disabling features of deps. and sub-deps.
 
@@ -35,7 +35,7 @@ cargo build --release
 
 ## Usage
 
-In your Rust(lang) project,
+In your [Rust(lang)][Rust] project,
 either:
 
 1. include this repo as a submodule:
@@ -77,3 +77,6 @@ Projects using these scripts:
 * [`kicad-text-injector`](https://github.com/hoijui/kicad-text-injector/) -
   A tool that allows to post-process your KiCad PCB files,
   by replacing variables of the type `${KEY}` in your text elements.
+
+[Rust]: https://www.rust-lang.org/
+[MUSL]: https://musl.libc.org/
