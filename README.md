@@ -38,29 +38,31 @@ cargo build --release
 In your [Rust(lang)][Rust] project,
 either:
 
-1. include this repo as a submodule:
+1. Clone as an untracked, ignored dir (recommended):
 
-    ```bash
-    git submodule add https://github.com/hoijui/rust-project-scripts.git run
+    ```shell
+    mkdir -p run
+    git clone https://github.com/hoijui/rust-project-scripts.git run/rp
+    run/rp/setup
     ```
 
-2. or as an untracked, ignored dir (recommended):
+2. Check out this repo as a git sub-module (_not_ recommended):
 
-    ```bash
-    git clone https://github.com/hoijui/rust-project-scripts.git run
-    if ! grep -q -r "^/run/\$" .git/info/exclude; then echo '/run/' >> .git/info/exclude; fi
+    ```shell
+    mkdir -p run
+    git submodule add https://github.com/hoijui/rust-project-scripts.git run/rp
     ```
 
 From then on, you can use the scripts like this:
 
-```bash
-run/build
+```shell
+run/rp/build
 ```
 
 or
 
-```bash
-run/test
+```shell
+ run/rp/test
 ```
 
 ## Projects
