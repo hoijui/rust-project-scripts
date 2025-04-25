@@ -76,7 +76,7 @@ else
     >&2 echo "INFO: Checking-out the build scripts under '$install_dir_rel' - done."
 fi
 
-local_git_ignore_file="$install_dir_rel/.git/info/exclude"
+local_git_ignore_file="$project_root/.git/info/exclude"
 >&2 echo "INFO: Ensure the build scripts are marked as git-ignored (locally/untracked) ..."
 if grep -q -r "^/$install_dir_rel/\$" "$local_git_ignore_file"
 then
