@@ -16,6 +16,7 @@ script_name="$(basename "$script_path")"
 APP_NAME="Rust project build scripts setup tool"
 project_root="$(pwd)"
 install_dir_rel='run/rp'
+update=true
 
 function print_help() {
 
@@ -30,6 +31,8 @@ function print_help() {
 	echo "    Show this help message and exit"
 	echo "  --install-dir <DIR>"
 	echo "    Overwrites the install dir location [default: ''$install_dir_rel']"
+	echo "  --skip-update"
+	echo "    Do not try to update the build scripts"
 	echo "Examples:"
 	echo "  $script_name"
 	echo "  $script_name --help"
@@ -51,6 +54,9 @@ do
 			install_dir_rel="$1"
 			shift
 			;;
+		--skip-update)
+			update=false
+			;;
 		*) # non-/unknown option
 			POSITIONAL+=("$arg") # save it in an array for later
 			;;
@@ -62,14 +68,19 @@ install_dir="$project_root/$install_dir_rel"
 
 if [ -e "$install_dir" ]
 then
-    if ! [ -d "$install_dir" ]
+    if $update
     then
-        >&2 echo "ERROR: '$install_dir' already exists, but is not a directory!"
-        exit 1
-    fi
-    >&2 echo "INFO: Update the build scripts ..."
-    git -C "$install_dir" pull --recurse-submodules
-    >&2 echo "INFO: Update the build scripts - done."
+		if ! [ -d "$install_dir" ]
+		then
+			>&2 echo "ERROR: '$install_dir' already exists, but is not a directory!"
+			exit 1
+		fi
+		>&2 echo "INFO: Update the build scripts ..."
+		git -C "$install_dir" pull --recurse-submodules
+		>&2 echo "INFO: Update the build scripts - done."
+	else
+		>&2 echo "INFO: Update the build scripts - skipped."
+	fi
 else
     >&2 echo "INFO: Checking-out the build scripts under '$install_dir_rel' ..."
     git clone --recurse-submodules "https://github.com/hoijui/rust-project-scripts" "$install_dir"
