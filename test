@@ -132,7 +132,11 @@ echo
 t_human_id="'cargo clippy' - Static code linting"
 echo "TEST: $t_human_id"
 failed=0
-cargo clippy --release -- \
+cargo clippy \
+	--release \
+	--tests \
+	--benches \
+	-- \
 	|| failed=1
 failures=$((failures + failed))
 tests=$((tests + 1))
