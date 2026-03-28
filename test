@@ -148,7 +148,7 @@ fi
 
 echo
 echo
-t_human_id="'cargo doc-code(-tests)' - Building documentaiton and running docu code"
+t_human_id="'cargo doc-code(-tests)' - Test-Compiling docu code"
 echo "TEST: $t_human_id"
 # This flag will run your code examples as tests.
 # For more, see the chapter on documentation tests:
