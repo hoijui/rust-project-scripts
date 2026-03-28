@@ -177,6 +177,34 @@ fi
 
 echo
 echo
+t_human_id="'cargo doc' - Building and validating documentation"
+echo "TEST: $t_human_id"
+# This flag will run your code examples as tests.
+# For more, see the chapter on documentation tests:
+# https://doc.rust-lang.org/rustdoc/documentation-tests.html
+failed=0
+RUSTDOCFLAGS="-D warnings" \
+	cargo doc \
+		--all-features \
+		--no-deps \
+		--release \
+		|| failed=1
+if $debug
+then
+	cargo test --release $doc_target -- --show-output || failed=1
+else
+	cargo test --release $doc_target || failed=1
+fi
+failures=$((failures + failed))
+tests=$((tests + 1))
+_report_test_res "$failed" "$t_human_id"
+if [ "$failed" = "1" ]
+then
+	failed_tests+=("$t_human_id")
+fi
+
+echo
+echo
 t_human_id="'REUSE' - Licensing meta-data check"
 echo "TEST: $t_human_id"
 if which reuse > /dev/null
